@@ -1,5 +1,6 @@
 package com.example.libraryapp_backend.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,5 +37,9 @@ public class LibraryController {
     @PostMapping("issue")
     public String Bookissue(){
         return "welcome to book issue page";
+    }
+    @GetMapping("view")
+    public String Bookview(){
+        return "welcome to book view page";
     }
 }
