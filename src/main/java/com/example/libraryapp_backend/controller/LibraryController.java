@@ -21,4 +21,8 @@ public class LibraryController {
     public String Bookadd(){
         return "welcome to book add page";
     }
+    @PostMapping("search")
+    public String Booksearch(){
+        return "welcome to book search page";
+    }
 }
