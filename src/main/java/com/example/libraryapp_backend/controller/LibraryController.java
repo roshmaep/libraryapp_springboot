@@ -29,4 +29,8 @@ public class LibraryController {
     public String Bookedit(){
         return "welcome to book edit page";
     }
+    @PostMapping("delete")
+    public String Bookdelete(){
+        return "welcome to book delete page";
+    }
 }
