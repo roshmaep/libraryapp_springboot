@@ -1,45 +1,89 @@
 package com.example.libraryapp_backend.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.libraryapp_backend.dao.BookDao;
+import com.example.libraryapp_backend.dao.RegistrationDao;
+import com.example.libraryapp_backend.model.Books;
+import com.example.libraryapp_backend.model.Registration;
+import org.apache.tomcat.jni.Library;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class LibraryController {
-    @PostMapping("admin")
-    public String Adminlogin(){
-        return "Welcome to admin login page";
+
+    @Autowired
+    private BookDao dao;
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/add",consumes = "application/json",produces = "application/json")
+    public Map<String,String> BookAdd(@RequestBody Books l)
+    {
+        System.out.println(l.getTitle().toString());
+        System.out.println(l.getAuthor().toString());
+        System.out.println(l.getDescription().toString());
+        System.out.println(l.getPublisher().toString());
+        System.out.println(l.getLanguage().toString());
+        System.out.println(l.getDistributor().toString());
+        System.out.println(l.getYear().toString());
+        System.out.println(l.getPrice().toString());
+        System.out.println(l.getImage().toString());
+        dao.save(l);
+        HashMap<String,String> map=new HashMap<>();
+        map.put("status","success");
+        return map;
     }
-    @PostMapping("user")
-    public String Userlogin(){
-        return "welcome to user login page";
+    @CrossOrigin(origins = "*")
+    @GetMapping("/view")
+    public List<Books> BookView()
+    {
+        return(List<Books>) dao.findAll();
     }
-    @PostMapping("reg")
-    public String Userreg(){
-        return "welcome to user registration";
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/search",consumes = "application/json",produces = "application/json")
+    public List<Books> SearchBook(@RequestBody Books l){
+        String title=l.getTitle();
+        System.out.println(title);
+        return (List<Books>) dao.SearchBook(l.getTitle());
+
     }
-    @PostMapping("add")
-    public String Bookadd(){
-        return "welcome to book add page";
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/delete",consumes = "application/json",produces = "application/json")
+    public HashMap<String, String> delete(@RequestBody Books l){
+        String id=String.valueOf(l.getId());
+        System.out.println(id);
+        dao.deleteBook(l.getId());
+        HashMap <String,String> map =new HashMap<>();
+        map.put("status","success");
+        return map;
+
     }
-    @PostMapping("search")
-    public String Booksearch(){
-        return "welcome to book search page";
+ @Autowired
+    private RegistrationDao dao1;
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/userreg",consumes = "application/json",produces = "application/json")
+    public Map<String,String> UserRegistration(@RequestBody Registration u){
+
+        System.out.println(u.getName().toString());
+        System.out.println(u.getAdhaar().toString());
+        System.out.println(u.getAddress().toString());
+        System.out.println(u.getPincode().toString());
+        System.out.println(u.getDob().toString());
+        System.out.println(u.getPhonenumber().toString());
+        System.out.println(u.getEmail().toString());
+        System.out.println(u.getUsername().toString());
+        dao1.save(u);
+        HashMap <String,String> map=new HashMap<>();
+        map.put("status","success");
+        return map;
     }
-    @PostMapping("edit")
-    public String Bookedit(){
-        return "welcome to book edit page";
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/userlogin", consumes = "application/json", produces = "application/json")
+    public List<Registration> UserLogin(@RequestBody Registration u){
+
+        return (List<Registration>) dao1.userLogin(u.getUsername(), u.getPassword());
     }
-    @PostMapping("delete")
-    public String Bookdelete(){
-        return "welcome to book delete page";
-    }
-    @PostMapping("issue")
-    public String Bookissue(){
-        return "welcome to book issue page";
-    }
-    @GetMapping("view")
-    public String Bookview(){
-        return "welcome to book view page";
-    }
+
 }
